@@ -1,0 +1,38 @@
+homeserver:
+  type: union
+  name: Homeserver Config
+  description: Config for your homeserver
+  default: synapse
+  tag:
+    id: type
+    name: Type
+    variantNames:
+      external: External
+      synapse: Synapse
+  variants:
+    external:
+      address:
+        type: string
+        name: Address
+        description: The FQDN of your matrix homeserver
+        nullable: false
+        pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
+        patternDescription: Must be a valid domain name.
+      ssl:
+        type: boolean
+        name: SSL
+        description: Connect to your homeserver over SSL
+        default: true
+    synapse:
+      address:
+        name: Tor Address
+        type: pointer
+        subtype: app
+        target: tor-address
+        app-id: synapse
+      ip:
+        name: Lan Address
+        type: pointer
+        subtype: app
+        target: lan-address
+        app-id: synapse
