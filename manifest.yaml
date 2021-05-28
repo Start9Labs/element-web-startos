@@ -1,6 +1,6 @@
 compat: v0
 id: element-web
-version: 0.1.0
+version: 1.7.29
 title: Element Web
 description:
   short: "Element Web is an client for using [matrix]."
