@@ -30,9 +30,3 @@ homeserver:
         subtype: app
         target: tor-address
         app-id: synapse
-      ip:
-        name: Lan Address
-        type: pointer
-        subtype: app
-        target: lan-address
-        app-id: synapse
