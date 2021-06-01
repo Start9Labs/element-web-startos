@@ -26,4 +26,5 @@ element-web/node_modules: element-web/package.json
 	cd element-web && yarn install
 
 element-web/config.json: element-web/config.sample.json
-	cat element-web/config.sample.json | jq ".default_theme = \"dark\"" > element-web/config.json
+	cat element-web/config.sample.json | jq ".default_theme = \"dark\"" > element-web/config.json.tmp && mv element-web/config.json.tmp element-web/config.json
+	cat element-web/config.json | jq "del(.default_server_config[\"m.identity_server\"])" > element-web/config.json.tmp && mv element-web/config.json.tmp element-web/config.json
