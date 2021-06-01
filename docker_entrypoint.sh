@@ -6,11 +6,6 @@ export HOST_IP=$(ip -4 route list match 0/0 | awk '{print $3}')
 
 HOMESERVER_ADDRESS=$(yq e ".homeserver.address" /root/start9/config.yaml)
 
-HOMESERVER_IP=$(yq e ".homeserver.ip" /root/start9/config.yaml)
-if [ "${HOMESERVER_IP}" = "null" ]; then
-HOMESERVER_IP=""
-fi
-
 if [ "$(yq e ".homeserver.ssl" /root/start9/config.yaml)" = "true" ]; then
 cat /var/www/config.json | jq ".default_server_config[\"m.homeserver\"].base_url = \"https://${HOMESERVER_ADDRESS}\"" > /var/www/config.json.tmp && mv /var/www/config.json.tmp /var/www/config.json
 else
