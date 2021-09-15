@@ -3,7 +3,7 @@
 set -e
 
 export HOST_IP=$(ip -4 route list match 0/0 | awk '{print $3}')
-
+export TOR_ADDRESS=$(yq e '.tor-address' /root/start9/config.yaml)
 HOMESERVER_ADDRESS=$(yq e ".homeserver.address" /root/start9/config.yaml)
 
 if [ "$(yq e ".homeserver.ssl" /root/start9/config.yaml)" = "true" ]; then
@@ -24,4 +24,3 @@ echo "    server_name ${TOR_ADDRESS};" >> /etc/nginx/conf.d/default.conf
 echo "}" >> /etc/nginx/conf.d/default.conf
 
 exec tini nginx -g "daemon off;"
-

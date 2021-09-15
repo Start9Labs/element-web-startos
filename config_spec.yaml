@@ -1,3 +1,11 @@
+tor-address:
+  name: Tor Address
+  description: The Tor address of the Web App
+  type: pointer
+  subtype: package
+  package-id: element-web
+  target: tor-address
+  interface: main
 homeserver:
   type: union
   name: Homeserver Config
@@ -6,7 +14,7 @@ homeserver:
   tag:
     id: type
     name: Type
-    variantNames:
+    variant-names:
       external: External
       synapse: Synapse
   variants:
@@ -17,7 +25,7 @@ homeserver:
         description: The FQDN of your matrix homeserver
         nullable: false
         pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
-        patternDescription: Must be a valid domain name.
+        pattern-description: Must be a valid domain name.
       ssl:
         type: boolean
         name: SSL
