@@ -66,9 +66,6 @@ jobs:
 
     - name: build the service package!
       run: |
-           pwd;
-           ls;
-           #git submodule update --init --recursive
            embassy-sdk init
            make
            mv element*s9pk ~/ #move this to home directory for easy reference in the upload step
