@@ -28,6 +28,9 @@ jobs:
         toolchain: stable
         override: true
         
+    - name: Get EmbassyOS Hash
+      run:  echo "EMBASSYHASH=$(git ls-remote https://github.com/Start9Labs/embassy-os HEAD | awk '{ print $1}')" >> $GITHUB_ENV
+        
     - uses: actions/cache@v3
       id: packageCache
       with:
@@ -49,7 +52,6 @@ jobs:
     - name: Checkout tools repo
       uses: actions/checkout@v3
       with:
-
            submodules: recursive
            
     - name: install package manager stuff
