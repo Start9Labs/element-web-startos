@@ -48,6 +48,9 @@ jobs:
       #check out service package for element
     - name: Checkout tools repo
       uses: actions/checkout@v3
+      with:
+
+           submodules: recursive
            
     - name: install package manager stuff
       if: steps.packageCache.outputs.cache-hit != 'true'
@@ -63,7 +66,7 @@ jobs:
       run: |
            pwd;
            ls;
-           git submodule update --init --recursive
+           #git submodule update --init --recursive
            embassy-sdk init
            make
            mv element*s9pk ~/ #move this to home directory for easy reference in the upload step
