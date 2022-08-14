@@ -28,6 +28,17 @@ jobs:
         toolchain: stable
         override: true
         
+    - uses: actions/cache@v3
+      id: packageCache
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-compat-${{ env.EMBASSYHASH }}
+        
         
     - name: Install packages
       run: |
@@ -39,6 +50,7 @@ jobs:
       uses: actions/checkout@v3
            
     - name: install package manager stuff
+      if: steps.packageCache.outputs.cache-hit != 'true'
       run: |
            cd ~/ && git clone https://github.com/Start9Labs/embassy-os.git; #TODO probably should make this an action or a variable of some sort.
            cd embassy-os;
@@ -49,6 +61,8 @@ jobs:
 
     - name: build the service package!
       run: |
+           pwd;
+           ls;
            git submodule update --init --recursive
            embassy-sdk init
            make
