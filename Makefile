@@ -7,7 +7,7 @@ ELEMENT_SRC := $(shell find ./element-web/src)
 all: verify
 
 install: 
-        embassy-cli package install element-web.s9pk
+	embassy-cli package install element-web.s9pk
 
 element-web.s9pk: manifest.yaml config_spec.yaml config_rules.yaml image.tar instructions.md $(ASSET_PATHS)
 	embassy-sdk pack
@@ -17,7 +17,6 @@ instructions.md: README.md
 
 image.tar: Dockerfile docker_entrypoint.sh element-web/webapp
 	DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --tag start9/element-web --platform=linux/arm/v7 -o type=docker,dest=image.tar .
-	
 	
 verify: element-web.s9pk
 	embassy-sdk verify s9pk element-web.s9pk
