@@ -40,7 +40,7 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-cargo-compat-${{ env.EMBASSYHASH }}
+        key: ${{ runner.os }}-element-web-${{ env.EMBASSYHASH }}
         
         
     - name: Install packages
