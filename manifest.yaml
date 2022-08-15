@@ -3,6 +3,13 @@ id: element-web
 version: 1.7.29
 title: Element Web
 license: apache
+main:
+  type: docker
+  image: main
+  entrypoint: docker_entrypoint.sh
+  args: []
+  mounts:
+    main: /root
 wrapper-repo: "https://github.com/Start9Labs/element-web-wrapper"
 upstream-repo: "https://github.com/Start9Labs/element-web-wrapper"
 support-site: "https://github.com/Start9Labs/element-web-wrapper/issues"
