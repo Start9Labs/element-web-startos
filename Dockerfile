@@ -7,8 +7,10 @@ RUN apk add \
     wget \
     jq
 
-RUN wget https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_arm.tar.gz -O - |\
-    tar xz && mv yq_linux_arm /usr/bin/yq
+#RUN wget https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_arm.tar.gz -O - |\
+#    tar xz && mv yq_linux_arm /usr/bin/yq
+RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.12.2/yq_linux_arm \
+    && chmod a+x /usr/local/bin/yq
 
 ADD ./element-web/webapp /var/www
 ADD ./docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
