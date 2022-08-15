@@ -6,19 +6,35 @@ description:
   short: "Element Web is an client for using [matrix]."
   long: "TODO"
 release-notes: Initial release.
-ports:
-  - internal: 80
-    tor: 80
-    lan: null
+interfaces:
+  main:
+    name: Web UI
+    description: Serves the Web UI via HTTP.
+    tor-config:
+      port-mapping:
+        80: "80"
+    lan-config:
+      443:
+        ssl: true
+        internal: 80
+    ui: true
+    protocols:
+      - tcp
+      - http
 image:
   type: tar
 mount: /root
-has-instructions: true
 os-version-required: ">=0.2.13"
 os-version-recommended: ">=0.2.13"
-assets: []
+assets:
+  license: LICENSE
+  icon: icon.png
+  instructions: instructions.md
+  docker-images: image.tar
 hidden-service-version: v3
 dependencies:
   synapse:
     version: "^1.32"
-    optional: Can configure an external [matrix] homeserver.
+    description: Can configure an external [matrix] homeserver.
+    requirement:
+      type: required
