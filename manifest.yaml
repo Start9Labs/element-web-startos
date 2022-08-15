@@ -3,6 +3,10 @@ id: element-web
 version: 1.7.29
 title: Element Web
 license: apache
+wrapper-repo: "https://github.com/Start9Labs/element-web-wrapper"
+upstream-repo: "https://github.com/Start9Labs/element-web-wrapper"
+support-site: "https://github.com/Start9Labs/element-web-wrapper/issues"
+marketing-site: "https://element.io/"
 description:
   short: "Element Web is an client for using [matrix]."
   long: "TODO"
