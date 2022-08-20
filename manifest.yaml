@@ -60,3 +60,6 @@ health-checks:
     args: ["web"]
     io-format: json
     inject: true
+volumes:
+  main:
+    type: data
