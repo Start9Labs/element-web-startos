@@ -50,3 +50,13 @@ dependencies:
     description: Can configure an external [matrix] homeserver.
     requirement:
       type: required
+health-checks:
+  interface:
+    name: Web UI
+    success-message: The Web UI is ready to visit
+    type: docker
+    image: main
+    entrypoint: health-check.sh
+    args: ["web"]
+    io-format: json
+    inject: true
