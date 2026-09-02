@@ -15,7 +15,7 @@ const shape = z.looseObject({
   default_server_config: serverConfigShape.catch(() =>
     serverConfigShape.parse({}),
   ),
-  disable_custom_urls: z.literal(false).catch(false),
+  disable_custom_urls: z.boolean().catch(false),
 })
 
 export const configJson = FileHelper.json(

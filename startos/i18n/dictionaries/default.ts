@@ -10,10 +10,13 @@ const dict = {
   'Must be a valid HTTPS URL': 6,
   'e.g. https://matrix.example.com': 7,
   'Configure Default Homeserver': 8,
-  'Set the Matrix homeserver that Element Web shows by default at sign-in.': 9,
+  'Set the Matrix homeserver Element Web shows by default at sign-in, and whether people may sign in to a different one.': 9,
   'If Element Web is running, it restarts to apply this change. Existing Matrix accounts and messages are not modified.': 10,
   'Default Homeserver Updated': 11,
   'Element Web will show this homeserver by default. People can still choose another homeserver at sign-in.': 12,
+  'Allow Other Homeservers': 13,
+  'Let people sign in to a homeserver other than the one above. Turn this off to restrict Element Web to your own Matrix server.': 14,
+  'Element Web will use this homeserver only. The sign-in screen no longer offers a custom homeserver.': 15,
 } as const
 
 /**

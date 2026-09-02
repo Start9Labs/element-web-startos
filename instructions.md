@@ -8,7 +8,7 @@
 
 The **Matrix Client** interface opens a self-hosted Element Web application. It can connect to Synapse or any other compatible Matrix homeserver, including a remote provider.
 
-The **Configure Default Homeserver** action chooses which server appears by default at sign-in. People can still choose another homeserver from Element Web.
+The **Configure Default Homeserver** action chooses which server appears by default at sign-in, and whether people may sign in to a different one instead.
 
 ## Getting set up
 
@@ -28,3 +28,5 @@ Use the web interface for chats, rooms, file sharing, voice and video calls, and
 ### Configure Default Homeserver
 
 Run this action when you want the sign-in screen to lead users to a different homeserver. A running Element Web service restarts to load the new URL; a stopped service uses it on the next start. This does not move accounts or messages between servers.
+
+Turn off **Allow Other Homeservers** to point everyone at your own server only — the sign-in screen then stops offering the choice of a different one. Leave it on if people using this Element Web have accounts elsewhere. It is a convenience, not a security boundary: anyone already signed in to another server stays signed in, and someone typing a full Matrix ID such as `@name:other-server.org` on the password form can still be sent to that server. To keep people off other servers for certain, restrict them on the homeserver itself.
