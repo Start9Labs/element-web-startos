@@ -42,9 +42,11 @@ Element Web is a static browser client. Matrix account data and messages live on
 
 ## File Models
 
-The package owns `config/config.json` as a JSON file model. Init merges schema defaults into it, preserving unmodeled upstream keys while enforcing an HTTPS default homeserver entry and keeping custom homeserver selection available at sign-in.
+The package owns `config/config.json` as a JSON file model and mounts it over the image's own `/app/config.json`, so it is the entire file Element Web loads — the image's copy is replaced, not merged into. Element's compiled-in defaults still cover most of the keys the file omits; the few they do not are listed under [Limitations and Differences](#limitations-and-differences).
 
-The **Configure Default Homeserver** action changes only `default_server_config.m.homeserver.base_url`. Because the upstream entrypoint copies configuration at launch, the action restarts a running Element Web service after writing the file; a stopped service applies it on its next start. A hand edit survives unless it conflicts with a modeled value; changes made while the service is running take effect after a restart.
+Init seeds the file from the model's defaults and re-asserts two keys on every start: `default_server_config.m.homeserver.base_url` and `disable_custom_urls`, the latter held at `false` so sign-in always offers a custom homeserver. A hand-added key the model does not name survives; those two are rewritten.
+
+The **Configure Default Homeserver** action changes only `default_server_config.m.homeserver.base_url`. Because the upstream entrypoint copies the configuration to `/tmp/element-web-config/` at launch and nginx serves it from there, the action restarts a running Element Web service after writing the file; a stopped service applies it on its next start. Any edit made while the service is running takes effect only after a restart.
 
 ## Dependencies
 
@@ -81,6 +83,8 @@ Backups snapshot the `config` volume wholesale, preserving the selected default 
 1. This package provides the web client only; a Matrix homeserver must be available separately.
 2. The user's browser connects to the homeserver directly, so the configured URL must be reachable and trusted by every browser using Element Web.
 3. StartOS backups preserve package configuration, not browser-local login sessions or encryption keys.
+4. The package serves its own `config.json` in place of the one in the upstream image. Element's compiled-in defaults cover most of what that file set, but three of its settings have no such fallback: `map_style_url`, so location sharing fails with a map-not-configured error unless the homeserver advertises a tile server in its `.well-known`; `m.identity_server`, so there is no default identity server for email or phone lookup unless the homeserver advertises one; and `room_directory.servers`, so the public room directory offers only the homeserver the user signed in to.
+5. `disable_custom_urls` is held at `false` on every start, so the sign-in screen always offers a custom homeserver. An installation cannot be locked to its configured default.
 
 ---
 

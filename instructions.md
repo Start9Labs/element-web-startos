@@ -2,8 +2,7 @@
 
 ## Documentation
 
-- [Element Web user guide](https://web-docs.element.dev/) — official guidance for signing in, messaging, rooms, calls, and encryption.
-- [Element Web configuration](https://github.com/element-hq/element-web/blob/develop/docs/config.md) — upstream reference for `config.json` settings.
+- [Element Web documentation](https://web-docs.element.dev/) — official guidance for signing in, messaging, rooms, calls, encryption, and the full `config.json` reference.
 
 ## What you get on StartOS
 
