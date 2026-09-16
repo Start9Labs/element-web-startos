@@ -34,6 +34,7 @@ const shape = z.looseObject({
       gateway_url: z.string(),
       app_id: z.string(),
       application_server_key: z.string(),
+      homeservers: z.array(z.string()).optional(),
     })
     .optional()
     .catch(undefined),

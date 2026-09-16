@@ -26,7 +26,7 @@ const dict = {
   'Must be an email address': 22,
   'A homeserver on this StartOS server': 23,
   Homeserver: 24,
-  'Where the homeserver that delivers the notifications runs. A homeserver elsewhere reaches this server only through a public domain: add one to the Push Gateway interface first, then choose it here.': 25,
+  'Where the homeserver that delivers the notifications runs. With a homeserver on this server, only accounts on it receive push. A homeserver elsewhere reaches this server only through a public domain: add one to the Push Gateway interface first, then choose it here.': 25,
   'Configure Push Notifications': 26,
   'Turn push notifications on or off, and choose how your homeserver reaches the push gateway.': 27,
   'If Element Web is running, it restarts to apply this change.': 28,

@@ -46,7 +46,7 @@ const inputSpec = InputSpec.of({
             return {
               name: i18n('Homeserver'),
               description: i18n(
-                'Where the homeserver that delivers the notifications runs. A homeserver elsewhere reaches this server only through a public domain: add one to the Push Gateway interface first, then choose it here.',
+                'Where the homeserver that delivers the notifications runs. With a homeserver on this server, only accounts on it receive push. A homeserver elsewhere reaches this server only through a public domain: add one to the Push Gateway interface first, then choose it here.',
               ),
               default: bridgeGateway,
               values,

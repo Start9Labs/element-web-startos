@@ -24,6 +24,7 @@ const pushEndpoints = [
 ]
 
 export const main = sdk.setupMain(async ({ effects }) => {
+  // Both keys Configure Default Homeserver writes, so the service restarts on either.
   const homeserver = await configJson
     .read((c) => ({
       base_url: c.default_server_config['m.homeserver'].base_url,
@@ -59,6 +60,10 @@ export const main = sdk.setupMain(async ({ effects }) => {
             gateway_url: gatewayUrl,
             app_id: pushAppId,
             application_server_key: vapidPublicKey(pem),
+            homeservers:
+              push.gateway === bridgeGateway
+                ? (synapseHostnames ?? undefined)
+                : undefined,
           }
         : undefined,
   })
