@@ -1,6 +1,12 @@
 import { i18n } from './i18n'
 import { sdk } from './sdk'
-import { uiPort } from './utils'
+import {
+  notifyPath,
+  pushHostId,
+  pushInterfaceId,
+  pushPort,
+  uiPort,
+} from './utils'
 
 export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
   const web = sdk.MultiHost.of(effects, 'web')
@@ -21,5 +27,25 @@ export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
     query: {},
   })
 
-  return [await origin.export([matrixClient])]
+  const push = sdk.MultiHost.of(effects, pushHostId)
+  const pushOrigin = await push.bindPort(pushPort, { protocol: 'http' })
+
+  const pushGateway = sdk.createInterface(effects, {
+    name: i18n('Push Gateway'),
+    id: pushInterfaceId,
+    description: i18n(
+      'Where a Matrix homeserver delivers push notifications for Element Web. A homeserver that is not on this StartOS server reaches it through a public domain added here.',
+    ),
+    type: 'api',
+    masked: true,
+    schemeOverride: null,
+    username: null,
+    path: notifyPath,
+    query: {},
+  })
+
+  return [
+    await origin.export([matrixClient]),
+    await pushOrigin.export([pushGateway]),
+  ]
 })

@@ -71,7 +71,6 @@ export const configureDefaultHomeserver = sdk.Action.withInput(
       },
       disable_custom_urls: !input.allow_other_homeservers,
     })
-    await sdk.restart(effects)
 
     return {
       version: '1',
