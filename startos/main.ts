@@ -6,11 +6,13 @@ import { sdk } from './sdk'
 import {
   bridgeGateway,
   getPushDomainUrls,
+  getSynapseHostnames,
   notifyPath,
   pushAppId,
   pushHostId,
   pushPort,
   uiPort,
+  urlHostname,
   vapidPublicKey,
 } from './utils'
 
@@ -22,6 +24,12 @@ const pushEndpoints = [
 ]
 
 export const main = sdk.setupMain(async ({ effects }) => {
+  const homeserver = await configJson
+    .read((c) => ({
+      base_url: c.default_server_config['m.homeserver'].base_url,
+      disable_custom_urls: c.disable_custom_urls,
+    }))
+    .const(effects)
   const push = await storeJson.read((s) => s.push).const(effects)
   const pem = await vapidPem.read().const(effects)
   const bridge = await sdk.host
@@ -32,12 +40,16 @@ export const main = sdk.setupMain(async ({ effects }) => {
     })
     .const()
   const domainUrls = await getPushDomainUrls(effects).const()
+  const synapseHostnames = await getSynapseHostnames(effects).const()
 
   const pushActive = !!push?.enabled && !!pem
+  const homeserverOnThisServer =
+    !!homeserver &&
+    !!synapseHostnames?.includes(urlHostname(homeserver.base_url) ?? '')
   const gatewayUrl = !pushActive
     ? undefined
     : push.gateway === bridgeGateway
-      ? bridge && `http://${bridge}${notifyPath}`
+      ? homeserverOnThisServer && bridge && `http://${bridge}${notifyPath}`
       : domainUrls.find((url) => url === push.gateway)
 
   await configJson.merge(effects, {

@@ -24,5 +24,15 @@ export const manifest = setupManifest({
       arch: ['x86_64', 'aarch64'],
     },
   },
-  dependencies: {},
+  dependencies: {
+    synapse: {
+      description:
+        'A homeserver on this server, which push notifications reach without any public domain',
+      optional: true,
+      metadata: {
+        title: 'Synapse',
+        icon: 'https://raw.githubusercontent.com/Start9Labs/synapse-startos/419c08bede61f713c09ef8be5a02d43ff6183c53/icon.svg',
+      },
+    },
+  },
 })

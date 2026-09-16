@@ -40,11 +40,11 @@ The fork's `e2ee` line keeps upstream's handling of end-to-end encryption. Its o
 
 The `config` volume holds everything the package owns:
 
-| Path                       | Purpose                                                                          |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| `config/config.json`       | Element Web's configuration, mounted read-only over the image's `/app/config.json` |
-| `config/store.json`        | Push notification settings                                                        |
-| `config/sygnal/vapid.pem`  | The VAPID private key, mounted read-only into the `sygnal` subcontainer at `/data` |
+| Path                      | Purpose                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| `config/config.json`      | Element Web's configuration, mounted read-only over the image's `/app/config.json` |
+| `config/store.json`       | Push notification settings                                                         |
+| `config/sygnal/vapid.pem` | The VAPID private key, mounted read-only into the `sygnal` subcontainer at `/data` |
 
 The upstream entrypoint copies `config.json` to `/tmp/element-web-config/config.json` before nginx starts serving the client. Sygnal's own `sygnal.yaml` is generated on every start and written to the `sygnal` subcontainer's rootfs, never to the volume.
 
@@ -54,9 +54,9 @@ Element Web is a static browser client. Matrix account data and messages live on
 
 `config/config.json` is a JSON file model mounted over the image's own `/app/config.json`, so it is the entire file Element Web loads — the image's copy is replaced, not merged into. Element's compiled-in defaults still cover most of the keys the file omits; the few they do not are listed under [Limitations and Differences](#limitations-and-differences).
 
-Init seeds the file from the model's defaults and repairs any of them that is missing or holds the wrong type: `default_server_config.m.homeserver.base_url` set to Matrix.org, `disable_custom_urls` `false`, `disable_phone_login` `true`, `embedded_pages.login_for_welcome` `true`, and `setting_defaults."UIFeature.identityServer"` `false`. The first two belong to the administrator: **Configure Default Homeserver** is the only thing that rewrites them, so a value it set survives every restart. The other three are package defaults for a self-hosted deployment; a hand edit survives, and a hand-added key the model does not name is left alone. `web_push` is derived: `main` writes it on every start from the push settings and the VAPID key, and removes it when push is off, so a hand edit to it does not survive.
+Init seeds the file from the model's defaults and repairs any of them that is missing or holds the wrong type: `default_server_config.m.homeserver.base_url` set to Matrix.org, `disable_custom_urls` `false`, `disable_phone_login` `true`, `embedded_pages.login_for_welcome` `true`, and `setting_defaults."UIFeature.identityServer"` `false`. The first two belong to the administrator: **Configure Default Homeserver** is the only thing that rewrites them, so a value it set survives every restart. The other three are package defaults for a self-hosted deployment; a hand edit survives, and a hand-added key the model does not name is left alone. `web_push` is derived: `main` writes it on every start from the push settings, the VAPID key and the homeserver location check below, and removes it when push is off or the chosen location cannot reach the default homeserver, so a hand edit to it does not survive.
 
-Because the upstream entrypoint copies the configuration to `/tmp/element-web-config/` at launch and nginx serves it from there, a change to `config.json` takes effect only after a restart. **Configure Default Homeserver** restarts a running service after writing the file; a change to the push settings restarts it through `main`.
+Because the upstream entrypoint copies the configuration to `/tmp/element-web-config/` at launch and nginx serves it from there, a change to `config.json` takes effect only after a restart. `main` reads the two homeserver keys and the push settings reactively, so a running service restarts when either action writes them.
 
 `config/store.json` holds the package's own state for push notifications: whether push is on, the contact email, and which gateway address the homeserver uses (`bridge`, or a public domain's push URL). Init seeds it with push on, the contact set to the placeholder `push@element-web.invalid` (an RFC 2606 reserved domain, so it can never be delivered anywhere), and the bridge as the gateway; **Configure Push Notifications** is the only thing that rewrites it.
 
@@ -64,9 +64,9 @@ Because the upstream entrypoint copies the configuration to `/tmp/element-web-co
 
 ## Dependencies
 
-None. Element Web communicates from the user's browser with any Matrix homeserver that implements the standard Client-Server API; it does not require a specific StartOS homeserver package.
+Synapse, optional, and never required at runtime: `setupDependencies` declares nothing, and Element Web communicates from the user's browser with any Matrix homeserver that implements the standard Client-Server API. The manifest lists Synapse so the marketplace shows what push works with out of the box.
 
-Push notifications do involve the homeserver in one direction: it posts each notification to this package's push gateway. A homeserver on the same StartOS server reaches the gateway over the container bridge at the address `main` resolves for it. Synapse blocks private address ranges for outbound requests by default, so a Synapse whose `ip_range_whitelist` does not admit the bridge gateway silently drops every push; the StartOS Synapse package admits it.
+Push notifications do involve the homeserver in one direction: it posts each notification to this package's push gateway. A homeserver on the same StartOS server reaches the gateway over the container bridge at the address `main` resolves for it — but only a homeserver on this server can, so `main` checks that the default homeserver is: it reads the hostnames of Synapse's `homeserver` interface (host `main`, both imported from `synapse-startos`) and requires the default homeserver URL's hostname to be one of them before it writes a bridge `web_push`. Synapse absent, or a default homeserver anywhere else, means no `web_push` and the task below. Synapse also blocks private address ranges for outbound requests by default, so a Synapse whose `ip_range_whitelist` does not admit the bridge gateway silently drops every push; the StartOS Synapse package admits it.
 
 ## Network Access and Interfaces
 
@@ -78,7 +78,7 @@ Sygnal makes outbound connections to the browsers' push services — `fcm.google
 
 ## Installation and First-Run Flow
 
-Init creates the Element Web configuration with the upstream Matrix.org endpoint as the default, seeds `store.json` with push on against a homeserver on this server, and generates the VAPID key, so the first start already runs Sygnal and offers push to browsers. The administrator may replace the homeserver before or after the first start, and people signing in may still choose another homeserver.
+Init creates the Element Web configuration with the upstream Matrix.org endpoint as the default, seeds `store.json` with push on against a homeserver on this server, and generates the VAPID key. The first start runs Sygnal, but because Matrix.org is not on this server it raises the `push-homeserver-remote` task and withholds `web_push`; pointing the default homeserver at the Synapse on this server clears it and browsers are offered push from the next restart. The administrator may replace the homeserver before or after the first start, and people signing in may still choose another homeserver.
 
 No account or credential is created by this package. Registration, authentication, rooms, messages, and account recovery are provided by the selected homeserver.
 
@@ -88,11 +88,14 @@ No account or credential is created by this package. Registration, authenticatio
 
 Turning off its **Allow Other Homeservers** toggle writes `disable_custom_urls: true`, which removes the server picker from the sign-in and registration screens. Two limits are worth knowing before treating it as a hard boundary: sessions already signed in to another homeserver keep working until they sign out, and upstream's legacy password form still performs its own `.well-known` lookup when someone enters a full Matrix ID, so it can still reach a different server. Enforce the boundary at the homeserver, not here.
 
-**Configure Push Notifications** turns web push on or off. On carries a contact email, which Sygnal sends to the push services as the VAPID contact for this gateway in every push request and which nobody using Element Web sees — nothing verifies it, and the placeholder is the right value for a private server, since a real address only tells the push services who runs it — and a homeserver location: **A homeserver on this StartOS server**, which resolves to the push gateway's container-bridge address, or one of the public domains added to the **Push Gateway** interface, for a homeserver running elsewhere. The action rewrites `store.json`; `main` then rewrites `web_push` in `config.json`, generates `sygnal.yaml`, and starts or stops the `sygnal` daemon, restarting a running service. It is safe to repeat. Turning push on is what makes Element offer working notifications while the app is closed; each person still turns notifications on in Element and allows them in the browser, and only then does the browser subscribe and register a pusher with the homeserver. Turning push off removes `web_push` and stops Sygnal, but the fork cannot unregister a pusher it no longer has configuration for, so a browser's registration stays on the homeserver until that session signs out. Changing the homeserver location while push stays on applies to browsers that turn notifications on afterwards; a browser already registered keeps the previous gateway address until it turns notifications off and on again in Element.
+**Configure Push Notifications** turns web push on or off. On carries a contact email, which Sygnal sends to the push services as the VAPID contact for this gateway in every push request and which nobody using Element Web sees — nothing verifies it, and the placeholder is the right value for a private server, since a real address only tells the push services who runs it — and a homeserver location: **A homeserver on this StartOS server**, which resolves to the push gateway's container-bridge address and requires the default homeserver to be the Synapse on this server, or one of the public domains added to the **Push Gateway** interface, for a homeserver running elsewhere. The action rewrites `store.json`; `main` then rewrites `web_push` in `config.json`, generates `sygnal.yaml`, and starts or stops the `sygnal` daemon, restarting a running service. It is safe to repeat. Turning push on is what makes Element offer working notifications while the app is closed; each person still turns notifications on in Element and allows them in the browser, and only then does the browser subscribe and register a pusher with the homeserver. Turning push off removes `web_push` and stops Sygnal, but the fork cannot unregister a pusher it no longer has configuration for, so a browser's registration stays on the homeserver until that session signs out. Changing the homeserver location while push stays on applies to browsers that turn notifications on afterwards; a browser already registered keeps the previous gateway address until it turns notifications off and on again in Element.
 
 ## Tasks
 
-Init watches the push settings: when push is on with a public domain as the homeserver location and that domain is no longer on the **Push Gateway** interface, it raises an `important` task with the replay key `element-web:push-gateway-missing` pointing at **Configure Push Notifications**, and clears it once the location is valid again. While that task stands, `main` omits `web_push` from `config.json`, so browsers stop being offered push until a location is chosen. It does not block startup.
+Init watches the push settings against the default homeserver and the **Push Gateway** interface, and raises one of two `important` tasks pointing at **Configure Push Notifications**, each cleared as soon as its condition no longer holds. While either stands, `main` omits `web_push` from `config.json`, so browsers stop being offered push until it is resolved; neither blocks startup.
+
+- `element-web:push-homeserver-remote` — push is on with **A homeserver on this StartOS server** as the location, but the default homeserver's hostname is not one of Synapse's on this server (Synapse absent, or the default left at Matrix.org or pointed elsewhere). A fresh install shows it until the administrator points the default homeserver at Synapse or chooses a public domain.
+- `element-web:push-gateway-missing` — push is on with a public domain as the location and that domain is no longer on the interface.
 
 ## Health Checks
 
@@ -138,14 +141,17 @@ file_models:
 startos_managed_env_vars:
   - ELEMENT_WEB_PORT
   - SYGNAL_CONF
-dependencies: none
+dependencies:
+  synapse: optional, never required at runtime; its homeserver hostnames decide whether the bridge gateway applies
 interfaces:
   matrix-client: { type: ui, host: web, port: 8080 }
-  push-gateway: { type: api, host: push, port: 5000, path: /_matrix/push/v1/notify }
+  push-gateway:
+    { type: api, host: push, port: 5000, path: /_matrix/push/v1/notify }
 actions:
   - configure-default-homeserver
   - configure-push-notifications
 tasks:
+  - element-web:push-homeserver-remote (important, while the default homeserver is not the Synapse here and the bridge is chosen)
   - element-web:push-gateway-missing (important, while the chosen domain is gone)
 health_checks:
   - element-web

@@ -22,7 +22,7 @@ const dict = {
   Off: 18,
   On: 19,
   'Contact Email': 20,
-  'Sent with every notification to the push service (Apple, Google, Mozilla) as the contact for this gateway, which web push requires. Nothing verifies it, and it is only ever used if a push service needs to reach whoever runs the gateway. For a private server, keep the placeholder: it gives the push services no address of yours. Enter your own address only if you want them to be able to contact you.': 21,
+  'Web push requires a contact address for whoever runs this gateway. Nothing checks it and nobody using Element Web sees it. Keep the placeholder unless you want to be reachable about this server.': 21,
   'Must be an email address': 22,
   'A homeserver on this StartOS server': 23,
   Homeserver: 24,
@@ -38,6 +38,7 @@ const dict = {
   'Where a Matrix homeserver delivers push notifications for Element Web. A homeserver that is not on this StartOS server reaches it through a public domain added here.': 35,
   'The push gateway is ready': 36,
   'The push gateway is not ready': 37,
+  "Push notifications cannot reach the default homeserver over this server's network: it is not the Synapse on this server. Point the default homeserver at Synapse here, or add a public domain to the Push Gateway interface and choose it as the homeserver location.": 38,
 } as const
 
 /**

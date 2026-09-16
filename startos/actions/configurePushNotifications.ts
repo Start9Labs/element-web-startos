@@ -24,7 +24,7 @@ const inputSpec = InputSpec.of({
           contact_email: Value.text({
             name: i18n('Contact Email'),
             description: i18n(
-              'Sent with every notification to the push service (Apple, Google, Mozilla) as the contact for this gateway, which web push requires. Nothing verifies it, and it is only ever used if a push service needs to reach whoever runs the gateway. For a private server, keep the placeholder: it gives the push services no address of yours. Enter your own address only if you want them to be able to contact you.',
+              'Web push requires a contact address for whoever runs this gateway. Nothing checks it and nobody using Element Web sees it. Keep the placeholder unless you want to be reachable about this server.',
             ),
             required: true,
             default: placeholderContactEmail,
