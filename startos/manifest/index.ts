@@ -15,7 +15,7 @@ export const manifest = setupManifest({
   images: {
     'element-web': {
       source: {
-        dockerTag: 'ghcr.io/start9labs/element-web:v1.12.27-start9-e2ee.1',
+        dockerTag: 'ghcr.io/start9labs/element-web:v1.12.27-start9-e2ee.3',
       },
       arch: ['x86_64', 'aarch64'],
     },

@@ -106,7 +106,7 @@ export const configurePushNotifications = sdk.Action.withInput(
               'Push notifications are on. Each person turns them on in Element under Settings, Notifications, and allows them when the browser asks.',
             )
           : i18n(
-              'Push notifications are off. A browser that had them on stops receiving them; its registration stays on the homeserver until that session signs out.',
+              'Push notifications are off. A browser that had them on removes its registration the next time it opens Element Web.',
             ),
       result: null,
     }

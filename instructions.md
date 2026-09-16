@@ -50,4 +50,4 @@ Run this action to turn push notifications off or back on, to change the contact
 
 Notifications reach a phone or desktop through the browser maker's push service — Google for Chrome, Apple for Safari and iOS, Mozilla for Firefox — the same channel every website's notifications use, and the only one that can wake an app that is not running. The message is encrypted for the browser before it leaves this server, so the push service sees that a notification was sent, not what it said. Turn push off if even that is not acceptable for your deployment.
 
-Turning push off stops new notifications at once. Anyone who had them on should also turn notifications off in Element's settings, which removes their registration from the homeserver.
+Turning push off stops new notifications at once; each browser removes its own registration the next time it opens Element Web.

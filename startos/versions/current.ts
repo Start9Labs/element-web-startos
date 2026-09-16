@@ -1,7 +1,7 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '1.12.27.1:0',
+  version: '1.12.27.3:0',
   releaseNotes: {
     en_US:
       "Now ships Start9's fork of Element Web: a phone layout, installation to the home screen, push notifications (on by default; Configure Push Notifications turns them off or sets a contact address), and a reload prompt after an update.",

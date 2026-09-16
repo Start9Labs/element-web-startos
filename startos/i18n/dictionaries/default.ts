@@ -32,7 +32,7 @@ const dict = {
   'If Element Web is running, it restarts to apply this change.': 28,
   'Push Notifications Updated': 29,
   'Push notifications are on. Each person turns them on in Element under Settings, Notifications, and allows them when the browser asks.': 30,
-  'Push notifications are off. A browser that had them on stops receiving them; its registration stays on the homeserver until that session signs out.': 31,
+  'Push notifications are off. A browser that had them on removes its registration the next time it opens Element Web.': 31,
   'The public domain chosen for push notifications is gone. Choose another homeserver location.': 33,
   'Push Gateway': 34,
   'Where a Matrix homeserver delivers push notifications for Element Web. A homeserver that is not on this StartOS server reaches it through a public domain added here.': 35,
