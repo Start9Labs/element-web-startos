@@ -41,10 +41,16 @@ export const getSynapseHostnames = (effects: T.Effects) =>
     { packageId: synapseManifest.id, hostId: homeserverHostId },
     (host) =>
       host
-        ? (Object.values(host.bindings)
-            .flatMap((b) => Object.values(b.interfaces))
-            .find((i) => i.id === homeserverInterfaceId)
-            ?.addressInfo.hostnames.map((h) => h.hostname) ?? [])
+        ? [
+            ...new Set(
+              Object.values(host.bindings)
+                .flatMap((b) => Object.values(b.interfaces))
+                .filter((i) => i.id === homeserverInterfaceId)
+                .flatMap((i) =>
+                  i.addressInfo.nonLocal.hostnames.map((h) => h.hostname),
+                ),
+            ),
+          ]
         : null,
   )
 
