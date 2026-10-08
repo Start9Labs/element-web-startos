@@ -13,7 +13,7 @@ const inputSpec = InputSpec.of({
   push: Value.union({
     name: i18n('Push Notifications'),
     description: i18n(
-      'Deliver notifications to phones and desktops while Element Web is closed. Each person still turns notifications on in Element and allows them in their browser.',
+      'Deliver notifications to phones and desktops while Element Web is closed.\n- Off: no push notifications. A browser that had them removes its registration the next time it opens Element Web.\n- On: the push gateway runs. Each person still turns notifications on in Element and allows them in their browser.',
     ),
     default: 'on',
     variants: Variants.of({
@@ -46,7 +46,7 @@ const inputSpec = InputSpec.of({
             return {
               name: i18n('Homeserver'),
               description: i18n(
-                'Where the homeserver that delivers the notifications runs. With a homeserver on this server, only accounts on it receive push. A homeserver elsewhere reaches this server only through a public domain: add one to the Push Gateway interface first, then choose it here.',
+                'Where the homeserver that delivers the notifications runs.\n- A homeserver on this StartOS server: only accounts on the Synapse here receive push, and the default homeserver must be that Synapse.\n- A public domain: a homeserver anywhere reaches the push gateway through it, and sessions on every homeserver receive push. Add one to the Push Gateway interface first, then choose it here.',
               ),
               default: bridgeGateway,
               values,

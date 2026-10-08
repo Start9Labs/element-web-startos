@@ -2,13 +2,13 @@ import { FileHelper, z } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
 import { bridgeGateway, placeholderContactEmail } from '../utils'
 
-const pushShape = z.object({
+const pushShape = z.looseObject({
   enabled: z.boolean().catch(true),
   contactEmail: z.string().catch(placeholderContactEmail),
   gateway: z.string().catch(bridgeGateway),
 })
 
-const shape = z.object({
+const shape = z.looseObject({
   push: pushShape.catch(() => pushShape.parse({})),
 })
 

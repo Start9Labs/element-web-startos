@@ -30,7 +30,7 @@ const shape = z.looseObject({
     settingDefaultsShape.parse({}),
   ),
   web_push: z
-    .object({
+    .looseObject({
       gateway_url: z.string(),
       app_id: z.string(),
       application_server_key: z.string(),

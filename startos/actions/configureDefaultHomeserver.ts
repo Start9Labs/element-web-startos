@@ -8,7 +8,7 @@ const inputSpec = InputSpec.of({
   base_url: Value.text({
     name: i18n('Homeserver URL'),
     description: i18n(
-      'HTTPS base URL for any Matrix homeserver that implements the Matrix Client-Server API.',
+      "The HTTPS address of any Matrix homeserver. For the Synapse on this server, use the HTTPS address of its Homeserver interface: push notifications through this server's network work only with that one.",
     ),
     required: true,
     default: defaultHomeserverUrl,
