@@ -64,7 +64,7 @@ Because the upstream entrypoint copies the configuration to `/tmp/element-web-co
 
 ## Dependencies
 
-Synapse, optional, and never required at runtime: `setupDependencies` declares nothing, and Element Web communicates from the user's browser with any Matrix homeserver that implements the standard Client-Server API. The manifest lists Synapse so the marketplace shows what push works with out of the box.
+Synapse, optional, and never required at runtime: `startos/dependencies.ts` declares it with `enabled` always false, so it is never a current dependency, and Element Web communicates from the user's browser with any Matrix homeserver that implements the standard Client-Server API. The declaration publishes Synapse, at `>=1.161.0:1` (the first release whose `ip_range_whitelist` admits the bridge), so the marketplace shows what push works with out of the box.
 
 Push notifications do involve the homeserver in one direction: it posts each notification to this package's push gateway. A homeserver on the same StartOS server reaches the gateway over the container bridge at the address `main` resolves for it — but only a homeserver on this server can, so `main` checks that the default homeserver is: it reads the hostnames of Synapse's `homeserver` interface (host `main`, both imported from `synapse-startos`) and requires the default homeserver URL's hostname to be one of them before it writes a bridge `web_push`. Synapse absent, or a default homeserver anywhere else, means no `web_push` and the task below. Synapse also blocks private address ranges for outbound requests by default, so a Synapse whose `ip_range_whitelist` does not admit the bridge gateway silently drops every push; the StartOS Synapse package admits it.
 
@@ -142,7 +142,7 @@ startos_managed_env_vars:
   - ELEMENT_WEB_PORT
   - SYGNAL_CONF
 dependencies:
-  synapse: optional, never required at runtime; its homeserver hostnames decide whether the bridge gateway applies
+  synapse: optional (>=1.161.0:1), never enabled; its homeserver hostnames decide whether the bridge gateway applies
 interfaces:
   matrix-client: { type: ui, host: web, port: 8080 }
   push-gateway:

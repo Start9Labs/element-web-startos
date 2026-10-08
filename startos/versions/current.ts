@@ -1,18 +1,23 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '1.12.27.3:0',
+  version: '1.12.27.3:1',
   releaseNotes: {
-    en_US:
-      "Now ships Start9's fork of Element Web: a phone layout, installation to the home screen, push notifications (on by default; Configure Push Notifications turns them off or sets a contact address), and a reload prompt after an update.",
-    es_ES:
-      'Ahora incluye la bifurcación de Element Web de Start9: diseño para teléfono, instalación en la pantalla de inicio, notificaciones push (activadas de forma predeterminada; Configurar notificaciones push las desactiva o establece una dirección de contacto) y un aviso para recargar tras una actualización.',
-    de_DE:
-      'Enthält jetzt Start9s Fork von Element Web: Smartphone-Layout, Installation auf dem Startbildschirm, Push-Benachrichtigungen (standardmäßig eingeschaltet; Push-Benachrichtigungen konfigurieren schaltet sie aus oder setzt eine Kontaktadresse) und eine Aufforderung zum Neuladen nach einem Update.',
-    pl_PL:
-      'Zawiera teraz fork Element Web od Start9: układ na telefon, instalację na ekranie głównym, powiadomienia push (domyślnie włączone; Konfiguruj powiadomienia push wyłącza je lub ustawia adres kontaktowy) oraz monit o przeładowanie po aktualizacji.',
-    fr_FR:
-      "Fournit désormais le fork d'Element Web par Start9 : mise en page pour téléphone, installation sur l'écran d'accueil, notifications push (activées par défaut ; Configurer les notifications push les désactive ou définit une adresse de contact) et invitation à recharger après une mise à jour.",
+    en_US: `- Configure Push Notifications lists what each choice of Push Notifications and Homeserver means.
+- Configure Default Homeserver's Homeserver URL explains which address to enter for the Synapse on this server.
+- The optional Synapse dependency names 1.161.0:1 as its minimum version.`,
+    es_ES: `- Configurar notificaciones push indica qué significa cada opción de Notificaciones push y Servidor Matrix.
+- La URL del servidor Matrix de Configurar servidor Matrix predeterminado explica qué dirección introducir para el Synapse de este servidor.
+- La dependencia opcional de Synapse indica 1.161.0:1 como versión mínima.`,
+    de_DE: `- Push-Benachrichtigungen konfigurieren erklärt, was jede Auswahl bei Push-Benachrichtigungen und Homeserver bedeutet.
+- Die Homeserver-URL in Standard-Homeserver konfigurieren erklärt, welche Adresse für den Synapse auf diesem Server einzugeben ist.
+- Die optionale Abhängigkeit Synapse nennt 1.161.0:1 als Mindestversion.`,
+    pl_PL: `- Konfiguruj powiadomienia push wyjaśnia, co oznacza każdy wybór w polach Powiadomienia push i Serwer Matrix.
+- Adres URL serwera Matrix w Skonfiguruj domyślny serwer Matrix wyjaśnia, jaki adres wpisać dla Synapse na tym serwerze.
+- Opcjonalna zależność Synapse podaje 1.161.0:1 jako wersję minimalną.`,
+    fr_FR: `- Configurer les notifications push indique ce que signifie chaque choix de Notifications push et Serveur Matrix.
+- L'URL du serveur Matrix de Configurer le serveur Matrix par défaut explique quelle adresse saisir pour le Synapse de ce serveur.
+- La dépendance optionnelle Synapse indique 1.161.0:1 comme version minimale.`,
   },
   migrations: {
     up: async () => {},
