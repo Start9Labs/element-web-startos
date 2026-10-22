@@ -20,7 +20,9 @@ export const manifest = setupManifest({
       arch: ['x86_64', 'aarch64'],
     },
     sygnal: {
-      source: { dockerTag: 'matrixdotorg/sygnal:v0.15.1' },
+      source: {
+        dockerBuild: { buildArgs: { IMAGE: 'matrixdotorg/sygnal:v0.15.1' } },
+      },
       arch: ['x86_64', 'aarch64'],
     },
   },

@@ -32,7 +32,7 @@ This package runs [Start9's fork of Element Web](https://github.com/Start9Labs/e
 
 ## Image and Container Runtime
 
-The package runs two images on x86_64 and aarch64. The `element-web` subcontainer runs `ghcr.io/start9labs/element-web`, the fork's `e2ee` build: upstream's Dockerfile, so the image's default entrypoint prepares the runtime configuration and launches unprivileged nginx, with StartOS setting `ELEMENT_WEB_PORT=8080`. The `sygnal` subcontainer runs the upstream `matrixdotorg/sygnal` image with `SYGNAL_CONF=/config/sygnal.yaml`, and exists only while push notifications are on.
+The package runs two images on x86_64 and aarch64. The `element-web` subcontainer runs `ghcr.io/start9labs/element-web`, the fork's `e2ee` build: upstream's Dockerfile, so the image's default entrypoint prepares the runtime configuration and launches unprivileged nginx, with StartOS setting `ELEMENT_WEB_PORT=8080`. The `sygnal` subcontainer runs the upstream `matrixdotorg/sygnal` image, with its CA store upgraded by the root `Dockerfile` until upstream publishes an image built on a fixed store, with `SYGNAL_CONF=/config/sygnal.yaml`, and exists only while push notifications are on.
 
 The fork's `e2ee` line keeps upstream's handling of end-to-end encryption. Its other line, keyless mode for a homeserver that force-disables encryption, is not what this package ships.
 
@@ -126,7 +126,7 @@ Backups snapshot the `config` volume wholesale: the selected default homeserver 
 package_id: element-web
 images:
   element-web: ghcr.io/start9labs/element-web
-  sygnal: matrixdotorg/sygnal
+  sygnal: matrixdotorg/sygnal + root Dockerfile (CA store upgrade)
 architectures: [x86_64, aarch64]
 subcontainers: [element-web, sygnal]
 volumes:
