@@ -13,16 +13,16 @@ docker buildx imagetools inspect ghcr.io/start9labs/element-web:<tag>
 
 A new upstream Element Web release reaches this package only once the fork has merged it and tagged an `e2ee` build; do not switch the package to `vectorim/element-web` to get there sooner. Read the fork's `docs/fork.md` for changes to the configuration keys the package writes (`web_push`, `disable_phone_login`), and upstream's release notes for the rest.
 
-For Sygnal, read the latest release and confirm the tag exists on Docker Hub for both architectures:
+For Sygnal, read the latest release and its `CHANGELOG.md` for the bumped range and confirm the tag exists on Docker Hub for both architectures:
 
 ```bash
-gh release view --repo matrix-org/sygnal --json tagName,publishedAt,url
+gh release view --repo element-hq/sygnal --json tagName,publishedAt,url
 docker buildx imagetools inspect matrixdotorg/sygnal:<tag>
 ```
 
-Check that the WebPush pushkin's understood configuration (`sygnal/webpushpushkin.py`, `UNDERSTOOD_CONFIG_FIELDS`) still covers what `startos/main.ts` generates.
+Check that the WebPush pushkin's understood configuration (`sygnal/webpushpushkin.py`, `UNDERSTOOD_CONFIG_FIELDS`) and the top-level sections `check_config` accepts (`sygnal/sygnal.py`) still cover what `startos/main.ts` generates, and that the image's runtime stage is still Debian-based, since the `Dockerfile` here runs `apt-get` on it.
 
 ## Applying the bump
 
-1. Change `images.element-web.source.dockerTag` in `startos/manifest/index.ts` to the fork's new `e2ee` tag, or `images.sygnal.source.dockerTag` to Sygnal's.
+1. Change `images.element-web.source.dockerTag` in `startos/manifest/index.ts` to the fork's new `e2ee` tag, or the `IMAGE` build argument under `images.sygnal.source.dockerBuild` to Sygnal's (`matrixdotorg/sygnal:<tag>`, still published under that name).
 2. Update `version` in `startos/versions/current.ts`: the first three components are the upstream Element Web version, the fourth is the fork's release number (`v1.12.27-start9-e2ee.1` → `1.12.27.1`). A Sygnal-only bump raises the StartOS revision instead.
