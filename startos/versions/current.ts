@@ -1,18 +1,18 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '1.12.35.1:0',
+  version: '1.12.35.1:1',
   releaseNotes: {
     en_US:
-      'Updates Element Web to 1.12.35. A new sign-in must now be verified with another signed-in session or your recovery key before Element opens.',
+      'Updates the push notification gateway, Sygnal, to 0.17.0, with security fixes in the networking libraries it is built on. [Sygnal changelog](https://github.com/element-hq/sygnal/blob/v0.17.0/CHANGELOG.md)',
     es_ES:
-      'Actualiza Element Web a 1.12.35. Un nuevo inicio de sesión debe verificarse con otra sesión abierta o con su clave de recuperación antes de que Element se abra.',
+      'Actualiza la pasarela de notificaciones push, Sygnal, a 0.17.0, con correcciones de seguridad en las bibliotecas de red sobre las que está construida. [Registro de cambios de Sygnal](https://github.com/element-hq/sygnal/blob/v0.17.0/CHANGELOG.md)',
     de_DE:
-      'Aktualisiert Element Web auf 1.12.35. Eine neue Anmeldung muss jetzt mit einer anderen angemeldeten Sitzung oder Ihrem Wiederherstellungsschlüssel bestätigt werden, bevor Element sich öffnet.',
+      'Aktualisiert das Push-Benachrichtigungs-Gateway Sygnal auf 0.17.0, mit Sicherheitskorrekturen in den Netzwerkbibliotheken, auf denen es aufbaut. [Sygnal-Änderungsprotokoll](https://github.com/element-hq/sygnal/blob/v0.17.0/CHANGELOG.md)',
     pl_PL:
-      'Aktualizuje Element Web do wersji 1.12.35. Nowe logowanie trzeba teraz zweryfikować inną zalogowaną sesją lub kluczem odzyskiwania, zanim Element się otworzy.',
+      'Aktualizuje bramę powiadomień push, Sygnal, do wersji 0.17.0, z poprawkami bezpieczeństwa w bibliotekach sieciowych, na których jest zbudowana. [Dziennik zmian Sygnal](https://github.com/element-hq/sygnal/blob/v0.17.0/CHANGELOG.md)',
     fr_FR:
-      "Met à jour Element Web vers la version 1.12.35. Une nouvelle connexion doit désormais être vérifiée avec une autre session connectée ou votre clé de récupération avant qu'Element ne s'ouvre.",
+      'Met à jour la passerelle de notifications push, Sygnal, vers la version 0.17.0, avec des correctifs de sécurité dans les bibliothèques réseau sur lesquelles elle repose. [Journal des modifications de Sygnal](https://github.com/element-hq/sygnal/blob/v0.17.0/CHANGELOG.md)',
   },
   migrations: {
     up: async () => {},

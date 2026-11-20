@@ -9,7 +9,7 @@
 > documentation is accurate and fully applicable — see the Documentation section of
 > `instructions.md` for links.
 
-This package runs [Start9's fork of Element Web](https://github.com/Start9Labs/element-web) on StartOS: an upstream Element Web release with a phone layout, installation to the home screen, web push notifications, and a reload prompt for a page left open across an update. Push notifications need a gateway the homeserver can post to, so the package also runs [Sygnal](https://github.com/matrix-org/sygnal) beside the client. The administrator chooses any compatible Matrix homeserver as the default and turns push on or off.
+This package runs [Start9's fork of Element Web](https://github.com/Start9Labs/element-web) on StartOS: an upstream Element Web release with a phone layout, installation to the home screen, web push notifications, and a reload prompt for a page left open across an update. Push notifications need a gateway the homeserver can post to, so the package also runs [Sygnal](https://github.com/element-hq/sygnal) beside the client. The administrator chooses any compatible Matrix homeserver as the default and turns push on or off.
 
 ---
 
